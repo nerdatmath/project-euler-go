@@ -5,42 +5,31 @@ import "fmt"
 func main() {
 	target := int(1e6)
 	count := 0
-	nCr := 1
-	n, r, p := 0, 0, 0
-	for n < 100 && nCr <= target {
-		n++
-		nCr *= n
-		if r < p {
+	n, r, nCr := 0, 0, 1
+	for n <= 100 {
+		// loop invariant: nCr <= target
+		// loop invariant: 0 <= r <= n - r <= n <= 100
+		if r < n-r-1 {
+			// Increase r
+			nCr *= n - r
 			r++
 			nCr /= r
-		} else {
-			p++
-			nCr /= p
 		}
-	}
-	// We have nCr > target now, and n is the minimum that allows this
-	for n <= 100 {
-		for nCr > target && r > 1 {
-			// reduce r until nCr <= target
+		if nCr > target {
+			// We just stepped over the boundary
+			// nCx > target for all r <= x <= n-r
+			count += n - r - r + 1
+		}
+		// Increase n
+		n++
+		nCr *= n
+		nCr /= n - r
+		// Decrease r while nCr > target
+		for nCr > target {
 			nCr *= r
 			r--
-			p++
-			nCr /= p
+			nCr /= n - r
 		}
-		if nCr <= target {
-			// back up one
-			nCr *= p
-			p--
-			r++
-			nCr /= r
-		}
-		fmt.Println(n, r)
-		// nCx > target for all r <= x <= n-r
-		count += n - r - r + 1
-		n++
-		nCr *= n
-		r++
-		nCr /= r
 	}
 	fmt.Println(count)
 }
