@@ -2,7 +2,7 @@ package primes
 
 import "sort"
 
-var primes [1<<16 + 3]int
+var primes [1<<24 + 3]int
 
 var Primes []int
 
