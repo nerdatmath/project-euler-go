@@ -35,9 +35,9 @@ func main() {
 		}
 		key[i] = ch[0]
 	}
-	plaintext := make([]byte, len(ciphertext))
+	sum := 0
 	for i, b := range ciphertext {
-		plaintext[i] = b ^ key[i%3]
+		sum += int(b ^ key[i%3])
 	}
-	fmt.Println(string(plaintext))
+	fmt.Println(sum)
 }
